@@ -1,5 +1,12 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+This is an app for checking and updating your money pockets between different currincies
+
+UI:
+
+git markdown add local image
+
+
 ## Available Scripts
 
 In the project directory, you can run:
