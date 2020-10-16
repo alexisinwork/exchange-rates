@@ -35,7 +35,7 @@ const Exchange = ({
   addExchange,
 }) => {
   const [rates, setRates] = useState({})
-  const [pocketTo, setPocketTo] = useState(getAnotherPocket(pocket.currency, pockets))
+  const [pocketTo, setPocketTo] = useState(pockets[1])
   const [amountFrom, setAmountFrom] = useState('')
   const [fetchError, setFetchError] = useState(null)
 
@@ -58,6 +58,7 @@ const Exchange = ({
   useEffect(() => {
     const getRatesOnPocketChange = async () => {
       const curRates = await fetchRatesPromise(pocket.currency)
+      setPocketTo(getAnotherPocket(pocket.currency, pockets))
 
       if (!!curRates.rates) setRates(curRates.rates)
       setFetchError(curRates.fetchError)
@@ -76,11 +77,6 @@ const Exchange = ({
       localRatesUpdate(pocket.currency, false)
     }
   }, [localRatesUpdate, pocket.currency])
-
-  // Updating pocketTo when user change pocket
-  useEffect(() => {
-    setPocketTo(getAnotherPocket(pocket.currency, pockets))
-  }, [pocket.currency, pockets])
 
   const updateRateBase = (base) => {
     // Callback is needed to update to a newBase
@@ -144,11 +140,19 @@ const Exchange = ({
             </RateAmount>
 
             <CurrencyRates>
-              <Chip
-                data-test="pocket-from-rate"
-                label={`1 ${pocket.currency} = 
-                    ${rates.rates[pocketTo.currency].toFixed(4)} ${pocketTo.currency}`}
-              />
+            {
+              rates.rates[pocketTo.currency] 
+                ?
+                  <Chip
+                    data-test="pocket-from-rate"
+                    label={`1 ${pocket.currency} = 
+                        ${rates.rates[pocketTo.currency].toFixed(4)} ${pocketTo.currency}`}
+                  />
+                : <Chip
+                    data-test="pocket-from-rate"
+                    label="Loading rate..."
+                  />
+            }
             </CurrencyRates>
           </RateFormControl>
 

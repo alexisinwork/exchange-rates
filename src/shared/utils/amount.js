@@ -11,8 +11,11 @@ export const getAmountDigit = (amount, currency) => {
 export const filterExchanges = (currency, exchanges) =>
   exchanges.filter(exc => exc.fromPocket === currency || exc.toPocket === currency)
 
-export const getAnotherPocket = (currency, pockets) => 
-  pockets.filter(p => p.currency !== currency)[0]
+export const getAnotherPocket = (currency, pockets) => {
+  const anotherPocket = pockets.filter(p => p.currency !== currency)[0]
+
+  return anotherPocket
+}
 
 export const formatCurrency = (amount) => {
   const validatedValue =  parseFloat(
