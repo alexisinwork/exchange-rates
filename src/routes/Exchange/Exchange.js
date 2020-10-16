@@ -139,7 +139,7 @@ const Exchange = ({
             <RateAmount variant="body1">
               You have{' '}
               <Highlighted data-test="pocket-from-amount" isHighlighted={isExchangeBlocked}>
-                {pocket.amount}
+                {pocket.amount.toFixed(2)}
               </Highlighted>
             </RateAmount>
 
@@ -185,7 +185,7 @@ const Exchange = ({
             />
 
             <RateAmount variant="body1" data-test="pocket-to-amount">
-              You have {pocketTo.amount}
+              You have {pocketTo.amount.toFixed(2)}
             </RateAmount>
 
             <CurrencyRates>
