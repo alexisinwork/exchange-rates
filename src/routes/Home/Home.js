@@ -22,8 +22,8 @@ const Home = ({
         and transfer money between them!
       </Typography>
 
-      <DemoAlert severity="warning">
-        This is just a demo! So to see your actual account you need to login
+      <DemoAlert severity="info">
+        This is just a demo! For now there is no Login functionality. Just enjoy demo!
       </DemoAlert>
 
       <Pockets

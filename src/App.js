@@ -81,7 +81,7 @@ const App = () => {
               </RouterLinkButton>
             </Typography>
             <Tooltip title="Login" placement="bottom">
-              <IconButton edge="start" color="inherit" aria-label="menu">
+              <IconButton disabled={true} edge="start" color="inherit" aria-label="menu">
                 <AccountCircleIcon />
               </IconButton>
             </Tooltip>
