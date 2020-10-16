@@ -8,6 +8,7 @@ This is an app for checking and updating your money pockets between different cu
 
 UI:
 
+![Screenshot](Home.png)
 ![Screenshot](Exchange.png)
 
 
