@@ -65,7 +65,7 @@ const Exchange = ({
     }
 
     getRatesOnPocketChange()
-  }, [pocket.currency])
+  }, [pocket.currency, pockets])
 
   // Updating rates every 10 seconds
   useEffect(() => {

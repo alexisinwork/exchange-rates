@@ -52,7 +52,7 @@ describe('<Exchange />', () => {
     it('current pocket and toPocket are USD and EUR with correct rates', () => {
       fromCurrency().should('have.text', 'USD')
       fromAmount().should('have.text', '302.23')
-      fromRate().should('have.text', `1 USD = \n                    ${rates['EUR'].toFixed(4)} EUR`)
+      fromRate().contains(`${rates['EUR'].toFixed(4)} EUR`)
 
       toCurrency().should('have.text', 'EUR')
       toAmount().should('have.text', 'You have 124.24')
@@ -84,7 +84,7 @@ describe('<Exchange />', () => {
     })
 
     it('rates should be updated with a new base', () => {
-      fromRate().should('have.text', `1 EUR = \n                    ${rates['USD'].toFixed(4)} USD`)
+      fromRate().contains(`${rates['USD'].toFixed(4)} USD`)
 
       toCurrency().should('have.text', 'USD')
       toAmount().should('have.text', 'You have 302.23')
