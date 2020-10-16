@@ -40,18 +40,20 @@ const Exchange = ({
   const [fetchError, setFetchError] = useState(null)
 
   const isExchangeBlocked = amountFrom > pocket.amount
+  const isEmptyValue = amountFrom === '' || amountFrom === '0.00'
 
   const history = useHistory()
 
   const localRatesUpdate = useCallback(
-    (base) => {
-      const curRates = updateRatesCallback(base)
+    (base, isStarted = true) => {
+      const curRates = updateRatesCallback(base, isStarted)
 
-      setRates(curRates.rates)
+      if (curRates.rates) setRates(curRates.rates)
       setFetchError(curRates.fetchError)
     },
     [updateRatesCallback]
   )
+
   // Each time we receive new pocket - we instantly update rates with a new base
   useEffect(() => {
     const getRatesOnPocketChange = async () => {
@@ -63,11 +65,18 @@ const Exchange = ({
 
     getRatesOnPocketChange()
   }, [pocket.currency])
+
   // Updating rates every 10 seconds
   useEffect(() => {
     const timer = setInterval(() => localRatesUpdate(pocket.currency), pollingTimeout)
-    return () => clearInterval(timer)
+    
+    // componenWillUnmount - clearInterval and cancel long-polling
+    return () => {
+      clearInterval(timer)
+      localRatesUpdate(pocket.currency, false)
+    }
   }, [localRatesUpdate, pocket.currency])
+
   // Updating pocketTo when user change pocket
   useEffect(() => {
     setPocketTo(getAnotherPocket(pocket.currency, pockets))
@@ -91,8 +100,7 @@ const Exchange = ({
       toAmount: rates.rates[pocketTo.currency] * amountFrom,
     }
 
-    if (amountFrom) addExchange(exchange)
-
+    addExchange(exchange)
     history.push('/')
   }
 
@@ -219,7 +227,7 @@ const Exchange = ({
           <IconButton
             onClick={handleExchange}
             data-test="exchange-done"
-            disabled={isExchangeBlocked}
+            disabled={isExchangeBlocked || isEmptyValue}
             edge="start"
             color="inherit"
             aria-label="exchange"

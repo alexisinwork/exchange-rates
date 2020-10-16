@@ -88,6 +88,7 @@ const Pockets = ({ pocket, updatePocket, changePocket, exchanges, pockets }) => 
             <IconButton
               onClick={goToExchangePage}
               data-test="go-to-exchange"
+              disabled={pocket.amount === 0}
               edge="start"
               color="inherit"
               aria-label="renew"
