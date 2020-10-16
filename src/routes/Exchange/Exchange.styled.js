@@ -18,9 +18,9 @@ export const CurrencyRates = styled.div`
 
 export const ExchangeRates = styled.div`
   display: flex;
-  width: 40%;
+  width: 100%;
   margin-top: 40px;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
 `
 
@@ -28,6 +28,10 @@ export const RateFormControl = styled(FormControl)`
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  &:first-child {
+    margin-right: 40px;
+  }
 `
 
 export const RateSelect = styled(Select)`

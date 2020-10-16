@@ -11,7 +11,7 @@ import AddIcon from '@material-ui/icons/Add'
 // Everything else
 import { getAmountDigit } from '../../../shared/utils/amount'
 
-import { 
+import {
   PocketsWrapper,
   Pocket,
   PocketTitle,
@@ -24,30 +24,21 @@ import {
   ExchangeTitle,
   ExchangeInfo,
   ExchangeFrom,
-  ExchangeTo
+  ExchangeTo,
 } from './Pockets.styled'
 
-const Pockets = ({
-  pocket,
-  updatePocket,
-  changePocket,
-  exchanges,
-  pockets
-}) => {
+const Pockets = ({ pocket, updatePocket, changePocket, exchanges, pockets }) => {
   const { amount, currency } = pocket
 
   const history = useHistory()
-  
-  const goToExchangePage = () => history.push('/exchange')
-  
-  const handleTopUp = () => {
-    const updatedPocket = pockets.find(p => p.currency === currency)
-    const updatedIndex = pockets.findIndex(p => p.currency === currency)
 
-    updatePocket(
-      updatedIndex,
-      { ...updatedPocket, amount: updatedPocket.amount + 10 }
-    )
+  const goToExchangePage = () => history.push('/exchange')
+
+  const handleTopUp = () => {
+    const updatedPocket = pockets.find((p) => p.currency === currency)
+    const updatedIndex = pockets.findIndex((p) => p.currency === currency)
+
+    updatePocket(updatedIndex, { ...updatedPocket, amount: updatedPocket.amount + 10 })
   }
 
   return (
@@ -57,42 +48,50 @@ const Pockets = ({
       <Pocket>
         <PocketTitle>
           <SmallTypography variant="h5" data-test="pocket-sign">
-            { getAmountDigit(amount, currency).sign }
+            {getAmountDigit(amount, currency).sign}
           </SmallTypography>
           <Typography variant="h3" data-test="pocket-amount">
-            { getAmountDigit(amount, currency).amount }
+            {getAmountDigit(amount, currency).amount}
           </Typography>
           <SmallTypography variant="h5" data-test="pocket-cents">
-            { getAmountDigit(amount, currency).cents }
+            {getAmountDigit(amount, currency).cents}
           </SmallTypography>
         </PocketTitle>
 
         <OtherPocketsWrapper>
-          { 
-            pockets.map((pocket, i) =>
-              <PocketBlock key={i} isActive={pocket.currency === currency} data-test="pocket">
-                <Typography variant="body2" data-test="pocket-another-amount">{ pocket.amount.toFixed(2) }</Typography>
-                <Button data-test="pocket-switcher" onClick={() => changePocket(pocket.currency)}>{pocket.currency}</Button>
-              </PocketBlock>
-            )
-          }
+          {pockets.map((pocket, i) => (
+            <PocketBlock key={i} isActive={pocket.currency === currency} data-test="pocket">
+              <Typography variant="body2" data-test="pocket-another-amount">
+                {pocket.amount.toFixed(2)}
+              </Typography>
+              <Button data-test="pocket-switcher" onClick={() => changePocket(pocket.currency)}>
+                {pocket.currency}
+              </Button>
+            </PocketBlock>
+          ))}
         </OtherPocketsWrapper>
 
         <OperationsWrapper>
           <Tooltip title="Top Up" placement="bottom">
-            <IconButton 
+            <IconButton
               onClick={handleTopUp}
               data-test="top-up"
-              edge="start" color="inherit" aria-label="top-up">
+              edge="start"
+              color="inherit"
+              aria-label="top-up"
+            >
               <AddIcon />
             </IconButton>
           </Tooltip>
 
           <Tooltip title="Exchange" placement="bottom">
-            <IconButton 
+            <IconButton
               onClick={goToExchangePage}
               data-test="go-to-exchange"
-              edge="start" color="inherit" aria-label="renew">
+              edge="start"
+              color="inherit"
+              aria-label="renew"
+            >
               <AutorenewIcon />
             </IconButton>
           </Tooltip>
@@ -100,29 +99,37 @@ const Pockets = ({
       </Pocket>
 
       <Exchanges>
-        {
-          exchanges.map((exc, i) =>
-            <ExchangeWrapper key={i} data-test="exchange" elevation={1}>
-              <ExchangeTitle>
-                <IconButton edge="start" color="inherit" aria-label="renew">
-                  <AutorenewIcon />
-                </IconButton>
-                {/* { fromPocket: EURO, toPocket: US_DOLLAR, fromAmount: 50, toAmount: 65.4, type: ADDED_OPERATION }, */}
-                <Typography variant="body1" data-test="exchange-info">
-                  Exchanged { exc.toPocket === currency ? 'to' : 'from' } { pocket.currency }
-                </Typography>
-              </ExchangeTitle>
+        {exchanges.map((exc, i) => (
+          <ExchangeWrapper key={i} data-test="exchange" elevation={1}>
+            <ExchangeTitle>
+              <IconButton edge="start" color="inherit" aria-label="renew">
+                <AutorenewIcon />
+              </IconButton>
 
-              <ExchangeInfo>
-                <ExchangeFrom data-test="exchange-from">{ exc.toPocket === currency ? '+' : '-' } { exc.fromAmount }</ExchangeFrom>
-                <ExchangeTo data-test="exchange-to">
-                  { exc.toPocket === currency ? '-' : '+' } 
-                  { exc.toAmount.toFixed(2) } { exc.toPocket === currency ? exc.fromPocket : exc.toPocket }
+              <Typography variant="body1" data-test="exchange-info">
+                Exchanged {exc.toPocket === currency ? 'to' : 'from'} {pocket.currency}
+              </Typography>
+            </ExchangeTitle>
+
+            <ExchangeInfo>
+              {exc.toPocket === currency ? (
+                <>
+                  <ExchangeFrom data-test="exchange-from">+ {exc.toAmount.toFixed(2)}</ExchangeFrom>
+                  <ExchangeTo data-test="exchange-to">
+                    - {exc.fromAmount} {exc.fromPocket}
                   </ExchangeTo>
-              </ExchangeInfo>
-            </ExchangeWrapper>
-          )
-        }
+                </>
+              ) : (
+                <>
+                  <ExchangeFrom data-test="exchange-from">- {exc.fromAmount}</ExchangeFrom>
+                  <ExchangeTo data-test="exchange-to">
+                    + {exc.toAmount.toFixed(2)} {exc.toPocket}
+                  </ExchangeTo>
+                </>
+              )}
+            </ExchangeInfo>
+          </ExchangeWrapper>
+        ))}
       </Exchanges>
     </PocketsWrapper>
   )

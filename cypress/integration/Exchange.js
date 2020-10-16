@@ -2,13 +2,15 @@ import { defaultPockets } from '../../src/shared/constants/exchangeRates'
 import { fetchRatesPromise } from '../../src/shared/utils/fetchRates'
 
 describe('<Exchange />', () => {
-  let rates, newBase = 'USD', oldBase = 'EUR'
+  let rates,
+    newBase = 'USD',
+    oldBase = 'EUR'
   // Basically bullet-proof check that we async get rates
   beforeEach((done) => {
     if (rates && newBase === oldBase) {
       done()
     } else {
-      cy.wrap(fetchRatesPromise(newBase)).then(res => {
+      cy.wrap(fetchRatesPromise(newBase)).then((res) => {
         rates = res.rates.rates
         oldBase = newBase
         done()
@@ -51,12 +53,12 @@ describe('<Exchange />', () => {
       fromCurrency().should('have.text', 'USD')
       fromAmount().should('have.text', '302.23')
       fromRate().should('have.text', `1 USD = \n                    ${rates['EUR'].toFixed(4)} EUR`)
-  
+
       toCurrency().should('have.text', 'EUR')
       toAmount().should('have.text', 'You have 124.24')
       toRate().should('have.text', `1 EUR = ${(1 / rates['EUR']).toFixed(4)} USD`)
     })
-  
+
     it('user can type exchange value and see exchanged result', () => {
       fromInput().type('1244').should('have.value', '12.44')
       toInput().should('have.value', `${(rates['EUR'] * 12.44).toFixed(2)}`)
@@ -87,7 +89,7 @@ describe('<Exchange />', () => {
       toCurrency().should('have.text', 'USD')
       toAmount().should('have.text', 'You have 302.23')
       toRate().should('have.text', `1 USD = ${(1 / rates['USD']).toFixed(4)} EUR`)
-  
+
       toInput().should('have.value', `${(rates['USD'] * 125.59).toFixed(2)}`)
     })
 
@@ -98,7 +100,7 @@ describe('<Exchange />', () => {
 
       toAmount().should('have.text', 'You have 487.23')
       toRate().should('have.text', `1 GBP = ${(1 / rates['GBP']).toFixed(4)} EUR`)
-  
+
       toInput().should('have.value', `${(rates['GBP'] * 125.59).toFixed(2)}`)
     })
 
@@ -127,7 +129,7 @@ describe('<Exchange />', () => {
       exchangeBlock().should('have.length', 8)
       exchangeInfo(exchangeBlock().first()).should('have.text', 'Exchanged from EUR')
       exchangeFrom(exchangeBlock().first()).should('have.text', '- 12.14')
-      exchangeTo(exchangeBlock().first()).should('have.text', '+10.99 GBP')
+      exchangeTo(exchangeBlock().first()).should('have.text', '+ 10.99 GBP')
     })
   })
 })

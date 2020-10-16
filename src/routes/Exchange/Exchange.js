@@ -15,14 +15,14 @@ import HomeIcon from '@material-ui/icons/Home'
 import { fetchRatesPromise } from '../../shared/utils/fetchRates'
 import { getAnotherPocket, formatCurrency } from '../../shared/utils/amount'
 import { EURO, US_DOLLAR, GB_POUND, pollingTimeout } from '../../shared/constants/exchangeRates'
-import { 
+import {
   ExchangeWrapper,
   CurrencyRates,
   RateFormControl,
   RateSelect,
   ExchangeRates,
   RateAmount,
-  Highlighted
+  Highlighted,
 } from './Exchange.styled'
 import { OperationsWrapper } from '../Home/components/Pockets.styled'
 
@@ -42,13 +42,16 @@ const Exchange = ({
   const isExchangeBlocked = amountFrom > pocket.amount
 
   const history = useHistory()
-  
-  const localRatesUpdate = useCallback((base) => {
-    const curRates = updateRatesCallback(base)
 
-    setRates(curRates.rates)
-    setFetchError(curRates.fetchError)
-  }, [updateRatesCallback])
+  const localRatesUpdate = useCallback(
+    (base) => {
+      const curRates = updateRatesCallback(base)
+
+      setRates(curRates.rates)
+      setFetchError(curRates.fetchError)
+    },
+    [updateRatesCallback]
+  )
   // Each time we receive new pocket - we instantly update rates with a new base
   useEffect(() => {
     const getRatesOnPocketChange = async () => {
@@ -57,7 +60,7 @@ const Exchange = ({
       if (!!curRates.rates) setRates(curRates.rates)
       setFetchError(curRates.fetchError)
     }
-    
+
     getRatesOnPocketChange()
   }, [pocket.currency])
   // Updating rates every 10 seconds
@@ -85,9 +88,9 @@ const Exchange = ({
       fromPocket: pocket.currency,
       toPocket: pocketTo.currency,
       fromAmount: amountFrom,
-      toAmount: rates.rates[pocketTo.currency] * amountFrom
+      toAmount: rates.rates[pocketTo.currency] * amountFrom,
     }
-    
+
     if (amountFrom) addExchange(exchange)
 
     history.push('/')
@@ -99,122 +102,132 @@ const Exchange = ({
     <ExchangeWrapper>
       <Typography variant="h3">Exchange Rates</Typography>
 
-      {
-        rates && rates.rates
-          ? <ExchangeRates>
-              <RateFormControl>
-                <RateSelect
-                  data-test="exchange-from-currency"
-                  value={pocket.currency}
-                  onChange={(e) => updateRateBase(e.target.value)}
-                >
-                  <MenuItem data-test="from-option-USD" value={US_DOLLAR}>USD</MenuItem>
-                  <MenuItem data-test="from-option-EUR" value={EURO}>EUR</MenuItem>
-                  <MenuItem data-test="from-option-GBP" value={GB_POUND}>GBP</MenuItem>
-                </RateSelect>
-      
-                <TextField 
-                  variant="outlined"
-                  value={amountFrom}
-                  data-test="exchange-from-amount"
-                  onChange={(e) => setAmountFrom(formatCurrency(e.target.value))}
-                />
-                
-                <RateAmount variant="body1">
-                  You have <Highlighted data-test="pocket-from-amount" isHighlighted={isExchangeBlocked}>
-                    {pocket.amount}
-                  </Highlighted>
-                </RateAmount>
-                
-                <CurrencyRates>
-                  <Chip
-                    data-test="pocket-from-rate"
-                    label={`1 ${pocket.currency} = 
-                    ${ rates.rates[pocketTo.currency].toFixed(4) } ${ pocketTo.currency }`} 
-                    />
-                </CurrencyRates>
-              </RateFormControl>
-              
-              <RateFormControl>
-                <RateSelect
-                   data-test="exchange-to-currency"
-                  value={pocketTo.currency}
-                  onChange={(e) => setPocketTo(pockets.find(p => p.currency === e.target.value))}
-                >
-                  <MenuItem 
-                    data-test="to-option-USD" 
-                    value={US_DOLLAR} 
-                    disabled={pocket.currency === US_DOLLAR}>
-                      USD
-                  </MenuItem>
-                  <MenuItem 
-                    data-test="to-option-EUR" 
-                    value={EURO} 
-                    disabled={pocket.currency === EURO}>
-                    EUR
-                  </MenuItem>
-                  <MenuItem 
-                    data-test="to-option-GBP" 
-                    value={GB_POUND} 
-                    disabled={pocket.currency === GB_POUND}>
-                      GBP
-                  </MenuItem>
-                </RateSelect>
-      
-                <TextField 
-                  data-test="exchange-to-amount"
-                  variant="outlined"
-                  value={(rates.rates[pocketTo.currency] * amountFrom).toFixed(2)}
-                  disabled={true}
-                />
-                
-                <RateAmount variant="body1" data-test="pocket-to-amount">
-                  You have {pocketTo.amount}
-                </RateAmount>
+      {rates && rates.rates ? (
+        <ExchangeRates>
+          <RateFormControl>
+            <RateSelect
+              data-test="exchange-from-currency"
+              value={pocket.currency}
+              onChange={(e) => updateRateBase(e.target.value)}
+            >
+              <MenuItem data-test="from-option-USD" value={US_DOLLAR}>
+                USD
+              </MenuItem>
+              <MenuItem data-test="from-option-EUR" value={EURO}>
+                EUR
+              </MenuItem>
+              <MenuItem data-test="from-option-GBP" value={GB_POUND}>
+                GBP
+              </MenuItem>
+            </RateSelect>
 
-                <CurrencyRates>
-                  <Chip 
-                    data-test="pocket-to-rate"
-                    label={`1 ${ pocketTo.currency } = ${ (1 / rates.rates[pocketTo.currency]).toFixed(4) } ${pocket.currency}`}
-                    variant="secondary" 
-                    disabled={true}
-                  />
-                </CurrencyRates>
-              </RateFormControl>
-            </ExchangeRates>
-          : <Chip 
-              label="Exchange rates are loading..."
-              variant="secondary" 
+            <TextField
+              variant="outlined"
+              value={amountFrom}
+              data-test="exchange-from-amount"
+              onChange={(e) => setAmountFrom(formatCurrency(e.target.value))}
+            />
+
+            <RateAmount variant="body1">
+              You have{' '}
+              <Highlighted data-test="pocket-from-amount" isHighlighted={isExchangeBlocked}>
+                {pocket.amount}
+              </Highlighted>
+            </RateAmount>
+
+            <CurrencyRates>
+              <Chip
+                data-test="pocket-from-rate"
+                label={`1 ${pocket.currency} = 
+                    ${rates.rates[pocketTo.currency].toFixed(4)} ${pocketTo.currency}`}
+              />
+            </CurrencyRates>
+          </RateFormControl>
+
+          <RateFormControl>
+            <RateSelect
+              data-test="exchange-to-currency"
+              value={pocketTo.currency}
+              onChange={(e) => setPocketTo(pockets.find((p) => p.currency === e.target.value))}
+            >
+              <MenuItem
+                data-test="to-option-USD"
+                value={US_DOLLAR}
+                disabled={pocket.currency === US_DOLLAR}
+              >
+                USD
+              </MenuItem>
+              <MenuItem data-test="to-option-EUR" value={EURO} disabled={pocket.currency === EURO}>
+                EUR
+              </MenuItem>
+              <MenuItem
+                data-test="to-option-GBP"
+                value={GB_POUND}
+                disabled={pocket.currency === GB_POUND}
+              >
+                GBP
+              </MenuItem>
+            </RateSelect>
+
+            <TextField
+              data-test="exchange-to-amount"
+              variant="outlined"
+              value={(rates.rates[pocketTo.currency] * amountFrom).toFixed(2)}
               disabled={true}
             />
-      }
 
-      { fetchError && 
+            <RateAmount variant="body1" data-test="pocket-to-amount">
+              You have {pocketTo.amount}
+            </RateAmount>
+
+            <CurrencyRates>
+              <Chip
+                data-test="pocket-to-rate"
+                label={`1 ${pocketTo.currency} = ${(1 / rates.rates[pocketTo.currency]).toFixed(
+                  4
+                )} ${pocket.currency}`}
+                variant="secondary"
+                disabled={true}
+              />
+            </CurrencyRates>
+          </RateFormControl>
+        </ExchangeRates>
+      ) : (
+        <Chip label="Exchange rates are loading..." variant="secondary" disabled={true} />
+      )}
+
+      {fetchError && (
         <Alert severity="danger">
           Sorry, but looks like there is an error loading rates: {fetchError}
         </Alert>
-      }
+      )}
 
       <OperationsWrapper>
-          <Tooltip title="Go Home" placement="bottom">
-            <IconButton 
-              onClick={goToHome}
-              data-test="go-home"
-              edge="start" color="inherit" aria-label="home">
-              <HomeIcon />
-            </IconButton>
-          </Tooltip>
+        <Tooltip title="Go Home" placement="bottom">
+          <IconButton
+            onClick={goToHome}
+            data-test="go-home"
+            edge="start"
+            color="inherit"
+            aria-label="home"
+          >
+            <HomeIcon />
+          </IconButton>
+        </Tooltip>
 
-          <Tooltip title="Exchange" placement="bottom">
-            <IconButton 
-              onClick={handleExchange}
-              data-test="exchange-done"
-              disabled={isExchangeBlocked}
-              edge="start" color="inherit" aria-label="exchange">
-              <AutorenewIcon />
-            </IconButton>
-          </Tooltip>
-        </OperationsWrapper>
+        <Tooltip title="Exchange" placement="bottom">
+          <IconButton
+            onClick={handleExchange}
+            data-test="exchange-done"
+            disabled={isExchangeBlocked}
+            edge="start"
+            color="inherit"
+            aria-label="exchange"
+          >
+            <AutorenewIcon />
+          </IconButton>
+        </Tooltip>
+      </OperationsWrapper>
     </ExchangeWrapper>
   )
 }

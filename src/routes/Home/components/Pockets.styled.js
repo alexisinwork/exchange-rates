@@ -22,6 +22,7 @@ export const Pocket = styled.div`
 export const PocketTitle = styled.div`
   display: flex;
   align-items: flex-end;
+  justify-content: center;
   background-color: rgba(33, 150, 243, 1);
   padding: 60px 20px;
   width: 175px;
@@ -67,7 +68,7 @@ export const OperationsWrapper = styled.div`
   margin-top: 25px;
 
   > * {
-    background-color: rgba(0,0,0,0.1);
+    background-color: rgba(0, 0, 0, 0.1);
     border: 1px solid rgba(33, 150, 243, 1);
   }
 
