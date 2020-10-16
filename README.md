@@ -2,9 +2,8 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 This is an app for checking and updating your money pockets between different currencies.
 
-## To run application: `npm install && npm start`
-## To test application: `npm test`
-
+### To run application: `npm install && npm start`
+### To test application: `npm test`
 ### In  case if on your machine Cypress for some reasons is not working try out: `npm run test:e2e:debug`
 
 UI:
