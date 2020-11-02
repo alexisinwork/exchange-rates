@@ -1,6 +1,6 @@
 ## Demo
 
-###[Awesome Exchange  app!](https://awesome-ptolemy-6275c0.netlify.app/exchange)
+*[Awesome Exchange  app!]*(https://awesome-ptolemy-6275c0.netlify.app/exchange)
 
 ## Installation
 
