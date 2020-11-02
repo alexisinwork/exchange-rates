@@ -1,6 +1,6 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Demo
 
-This is an app for checking and updating your money pockets between different currencies.
+[Awesome Exchange  app!](https://awesome-ptolemy-6275c0.netlify.app/exchange)
 
 ### To run application: `npm install && npm start`
 
